@@ -1,0 +1,82 @@
+Naive Bayes
+
+Python code
+
+from sklearn.naive_bayes import GaussianNB
+x=np.array([[-3, 7],[1, 5],[1, 2],[-2, 0],[2, 3],[-4, 0], [-1, 1], [1, 1], [-2, 1], [2, 7], [-4, 1], [2,1]])
+Y=np.array([3,3,3,3,4,3,3,4,3,4,4,4])
+model.fit(x, Y)
+model.predict([[1, 2],[3, 4]])
+
+1. There three NB models in sklearn, GaussianNB, MultinomialNB, BernoulliNB, last two requires input should be non-negative.
+2. How does NB works,
+  assume features are independent; 
+  step1, make frequency tables for each features
+  step2, calcuate bayes probablity for each class, classify the points as the class with highest probablity.
+  
+3. "Zero frequency" issues, apply Laplace Estimation to solve it.
+
+
+Explanation of how NB works in details.
+
+from scipy import stats
+import numpy as np
+import pandas as pd
+
+x=np.array([[-3, 7],[1, 5],[1, 2],[-2, 0],[2, 3],[-4, 0], [-1, 1], [1, 1], [-2, 1], [2, 7], [-4, 1], [2,1]])
+Y=np.array([3,3,3,3,4,3,3,4,3,4,4,4])
+data = np.concatenate((x, Y.reshape(12,1)), axis=1)
+data.sort(0)
+# make frequency tables for the two freatures.
+freq_x1 = pd.crosstab(index=data[:,0], columns=data[:,2], margins=False)
+freq_x2 = pd.crosstab(index=data[:,1], columns=data[:,2], margins=False)
+
+print freq_x1.to_string()
+
+col_0  3  4  5  7
+row_0            
+-4     2  0  0  0
+-3     1  0  0  0
+-2     2  0  0  0
+-1     0  1  0  0
+ 1     0  3  1  0
+ 2     0  0  0  2
+
+print freq_x2.to_string()
+
+col_0  3  4  5  7
+row_0            
+0      2  0  0  0
+1      3  1  0  0
+2      0  2  0  0
+3      0  1  1  1
+4      0  0  0  1
+
+For an predictor [f1, f2] = [1, 2]
+P[c|f1, f2] = P[f1, f2|c] * P[c] / P[f1, f2]
+Use above frequency tables,
+P[f1, f2] = 1/18
+c=4 get the highest probablity 4/9. Thus, [1, 2] should be classied as class 4.
+
+Try for [f1, f2] = [3, 4], may use Laplace estimation.
+
+
+Questions,
+
+1. Why we need independency assumption?
+2. NB for numerical features, assume a Normal distribution, how does this work? P[F1=2], or P[F1<=3], how to explain this?
+3. P[f1, f2|c]  ?= P[f1|c] * P[f2|c] in the case of independence. Proof?
+4. How does Laplace estimation apply to multi features?
+5. If we do have the feature f1 exist in training set, but the prob of P[F1=f1|C=c] is zero, do we need to use Laplace estimation?
+
+
+
+Model pros and cons, when it doesn't suitable.
+1. “Naive Bayes” mainly used for classification. 
+2. If continuous features do not have normal distribution, we should use transformation or different methods to convert it in normal distribution.
+3. Remove correlated features, as the highly correlated features are voted twice in the model and it can lead to over inflating importance.
+4. You might think to apply some classifier combination technique like ensembling, bagging and boosting but these methods would not help. Actually, “ensembling, boosting, bagging” won’t help since their purpose is to reduce variance. Naive Bayes has no variance to minimize.
+
+
+
+Sources from https://www.analyticsvidhya.com/blog/2017/09/naive-bayes-explained/
