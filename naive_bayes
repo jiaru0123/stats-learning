@@ -60,6 +60,11 @@ c=4 get the highest probablity 4/9. Thus, [1, 2] should be classied as class 4.
 
 Try for [f1, f2] = [3, 4], may use Laplace estimation.
 
+Model pros and cons, when it doesn't suitable.
+1. “Naive Bayes” mainly used for classification. 
+2. If continuous features do not have normal distribution, we should use transformation or different methods to convert it in normal distribution.
+3. Remove correlated features, as the highly correlated features are voted twice in the model and it can lead to over inflating importance.
+4. You might think to apply some classifier combination technique like ensembling, bagging and boosting but these methods would not help. Actually, “ensembling, boosting, bagging” won’t help since their purpose is to reduce variance. Naive Bayes has no variance to minimize.
 
 Questions,
 
@@ -68,15 +73,7 @@ Questions,
 3. P[f1, f2|c]  ?= P[f1|c] * P[f2|c] in the case of independence. Proof?
 4. How does Laplace estimation apply to multi features?
 5. If we do have the feature f1 exist in training set, but the prob of P[F1=f1|C=c] is zero, do we need to use Laplace estimation?
-
-
-
-Model pros and cons, when it doesn't suitable.
-1. “Naive Bayes” mainly used for classification. 
-2. If continuous features do not have normal distribution, we should use transformation or different methods to convert it in normal distribution.
-3. Remove correlated features, as the highly correlated features are voted twice in the model and it can lead to over inflating importance.
-4. You might think to apply some classifier combination technique like ensembling, bagging and boosting but these methods would not help. Actually, “ensembling, boosting, bagging” won’t help since their purpose is to reduce variance. Naive Bayes has no variance to minimize.
-
+6. Why the Bayes eeror rate is analogous to the irreducible error? Or why Naive Bayes has no variance to minimize?
 
 
 Sources from https://www.analyticsvidhya.com/blog/2017/09/naive-bayes-explained/
