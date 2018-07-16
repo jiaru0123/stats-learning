@@ -12,7 +12,7 @@ model.predict([[1, 2],[3, 4]])
 2. How does NB works,
   assume features are independent; 
   step1, make frequency tables for each features
-  step2, calcuate bayes probablity for each class, classify the points as the class with highest probablity.
+  step2, calcuate posterior probablity for each class, classify the points as the class with highest probablity.
   
 3. "Zero frequency" issues, apply Laplace Estimation to solve it.
 
